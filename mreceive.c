@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/socket.h>
 
 #include "mreceive.h"
 
@@ -22,11 +23,11 @@ int main (int argc, char * argv[])
 	int clientPort;
 	int client = socket_accept(socket, clientIp, &clientPort);
 
-	socket_read(client, &header, sizeof(struct mheader), -1);
+	recv(client, &header, sizeof(struct mheader), 0);
 
-	//printf("%s %i", header.filename, header.length);
+	printf("%s %i \n", header.filename, header.length);
 
-	int file = open(header.filename, O_WRONLY | O_CREAT, 0644);
+	int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
 	if(file < 0)
 	{
 		perror("open");
@@ -37,7 +38,9 @@ int main (int argc, char * argv[])
 	int i = header.length;
 	while(i > 0)
 	{
-		r = socket_read(client, buffer, BUFFERSIZE, -1);
+		//r = socket_read(client, buffer, BUFFERSIZE, -1);
+		r = recv(client, buffer, BUFFERSIZE, 0);
+		printf("%i \n", r);
 		if(write(file, buffer, r) < 0)
 		{
 			perror("write");

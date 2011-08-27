@@ -21,12 +21,12 @@ int main (int argc, char * argv[])
 {
 	char *ip = argv[1];
 	int port = atoi(argv[2]);
-	char *filename = argv[3];	char buffer[BUFFERSIZE];
+	char *filename = argv[3];
+	char buffer[BUFFERSIZE];
 	int bytes;
 	struct mheader header;
 
 	strcpy(header.filename, filename);
-	printf("%s", header.filename);
 	header.length = getFileSize(filename);
 
 	int socket = socket_create_connect(ip, port);
