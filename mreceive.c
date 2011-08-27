@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "mreceive.h"
 
@@ -21,28 +22,33 @@ int main (int argc, char * argv[])
 	int clientPort;
 	int client = socket_accept(socket, clientIp, &clientPort);
 
-	printf("%s %i", clientIp, clientPort);
-
-	printf("%i", sizeof(struct mheader));
 	socket_read(client, &header, sizeof(struct mheader), -1);
 
-	printf("%s %i", header.filename, header.length);
+	//printf("%s %i", header.filename, header.length);
 
-	int file = open(header.filename, O_WRONLY);
-
-	int i;
-	for (i = header.length; i > 0; i - BUFFERSIZE)
+	int file = open(header.filename, O_WRONLY | O_CREAT, 0644);
+	if(file < 0)
 	{
-		bytes =  i > BUFFERSIZE ? BUFFERSIZE : i;
-		socket_read(client, buffer, bytes, -1);
-		write(file, buffer, bytes);
+		perror("open");
+		return -1;
+	}
+
+	int r = 0;
+	int i = header.length;
+	while(i > 0)
+	{
+		r = socket_read(client, buffer, BUFFERSIZE, -1);
+		if(write(file, buffer, r) < 0)
+		{
+			perror("write");
+			return -1;
+		}
+		i -= r;
 	}
 
 	close(file);
 	socket_close(client);
 	socket_close(socket);
 	
-	printf("success");
-
 	return 0;
 }
