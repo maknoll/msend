@@ -26,6 +26,9 @@ int main (int argc, char * argv[])
 	int bytes;
 	struct mheader header;
 
+	// initialize array with zeros
+	memset(&header.filename, 0, 128);
+
 	strcpy(header.filename, filename);
 	header.length = getFileSize(filename);
 
