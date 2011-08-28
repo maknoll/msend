@@ -51,7 +51,8 @@ int main (int argc, char * argv[])
 
 		SHA256_Init(&sha_ctx);
 
-		int i, bytes;
+		long i;
+		int bytes;
 		for(i = header.length, bytes = 0; i > 0; i -= bytes)
 		{
 			bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
@@ -82,8 +83,8 @@ int main (int argc, char * argv[])
 
 		socket_close(client);
 
-		printf("%s received (%i bytes) ", header.filename, header.length);
-		if (memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH) == 0)
+		printf("%s received (%li bytes) ", header.filename, header.length);
+		if (!memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH))
 			printf("SHA256 matches\n");
 		else
 			printf("SHA256 differs\n");

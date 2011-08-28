@@ -1,7 +1,7 @@
 struct mheader 
 {
 	char filename[128];
-	int length;
+	long length;
 };
 
-int getFileSize(char *filename);
+long getFileSize(char *filename);

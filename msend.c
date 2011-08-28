@@ -10,7 +10,7 @@
 
 #define BUFFERSIZE 1452
 
-int getFileSize(char *filename)
+long getFileSize(char *filename)
 {
 	struct stat fileinfo;
 	stat(filename, &fileinfo);
@@ -50,7 +50,8 @@ int main (int argc, char *argv[])
 	
 	SHA256_Init(&sha_ctx);
 
-	int i, bytes;
+	long i;
+	int bytes;
 	for (i = header.length, bytes = 0; i > 0; i -= bytes)
 	{
 		bytes = read(file, buffer, BUFFERSIZE);
