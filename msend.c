@@ -21,22 +21,9 @@ long getFileSize(char *filename)
 	return fileinfo.st_size;
 }
 
-int main (int argc, char *argv[]) 
+int socket_connect(char *addr, char *port)
 {
-	char *addr = argv[1];
-	char *port = argv[2];
-	char *filename = argv[3];
-	char buffer[BUFFERSIZE];
-	struct mheader header;
-	SHA256_CTX sha_ctx;
-	unsigned char sha256[SHA256_DIGEST_LENGTH];
 	struct addrinfo hints, *info;
-
-	// initialize array with zeros
-	memset(&header.filename, 0, 128);
-
-	strcpy(header.filename, filename);
-	header.length = getFileSize(filename);
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_socktype = SOCK_STREAM;
@@ -51,6 +38,26 @@ int main (int argc, char *argv[])
 	connect(sock, (struct sockaddr*)info->ai_addr, info->ai_addrlen);
 	
 	freeaddrinfo(info);
+
+	return sock;
+}
+
+int main (int argc, char *argv[]) 
+{
+	char *addr = argv[1];
+	char *port = argv[2];
+	char *filename = argv[3];
+	char buffer[BUFFERSIZE];
+	struct mheader header;
+	SHA256_CTX sha_ctx;
+	unsigned char sha256[SHA256_DIGEST_LENGTH];
+
+	memset(&header.filename, 0, 128);
+
+	strcpy(header.filename, filename);
+	header.length = getFileSize(filename);
+
+	int sock = socket_connect(addr, port);
 
 	int file = open(filename, O_RDONLY);
 	if(file < 0)
