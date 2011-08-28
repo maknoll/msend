@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
+#include <stdbool.h>
 
 #include "mreceive.h"
 
@@ -17,40 +19,42 @@ int main (int argc, char * argv[])
 	int port = atoi(argv[1]);
 	struct mheader header;
 
-	int socket = socket_create_listen("0.0.0.0", port, 1);
+	int socket = socket_create_listen("0.0.0.0", port, 4);
 	
-	char clientIp[16];
-	int clientPort;
-	int client = socket_accept(socket, clientIp, &clientPort);
+	struct sockaddr_in si;
+	socklen_t len = sizeof(si);
 
-	read(client, &header, sizeof(struct mheader));
-
-	printf("%s %i \n", header.filename, header.length);
-
-	int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
-	if(file < 0)
+	while (true)
 	{
-		perror("open");
-		return -1;
-	}
+		int client = accept(socket, (void *)&si, &len);
 
-	int r = 0;
-	int i = header.length;
-	while(i > 0)
-	{
-		//r = socket_read(client, buffer, BUFFERSIZE, -1);
-		r = read(client, buffer, BUFFERSIZE);
-		printf("%i \n", r);
-		if(write(file, buffer, r) < 0)
+		read(client, &header, sizeof(struct mheader));
+
+		int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
+		if(file < 0)
 		{
-			perror("write");
+			perror("open");
 			return -1;
 		}
-		i -= r;
+
+		int r = 0;
+		int i = header.length;
+		while(i > 0)
+		{
+			r = read(client, buffer, BUFFERSIZE);
+			if(write(file, buffer, r) < 0)
+			{
+				perror("write");
+				return -1;
+			}
+			i -= r;
+		}
+
+		close(file);
+		socket_close(client);
+		printf("%s received (%i bytes)\n", header.filename, header.length);
 	}
 
-	close(file);
-	socket_close(client);
 	socket_close(socket);
 	
 	return 0;
