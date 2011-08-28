@@ -30,8 +30,17 @@ int main (int argc, char * argv[])
 	while (true)
 	{
 		int client = accept(socket, (void *)&si, &len);
+		if(client < 0)
+		{
+			perror("accept");
+			return -1;
+		}
 
-		read(client, &header, sizeof(struct mheader));
+		if(read(client, &header, sizeof(struct mheader)) < 0)
+		{
+			perror("read");
+			return -1;
+		}
 
 		int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
 		if(file < 0)
@@ -43,9 +52,15 @@ int main (int argc, char * argv[])
 		SHA256_Init(&sha_ctx);
 
 		int i, bytes;
-		for (i = header.length, bytes = 0; i > 0;)
+		for(i = header.length, bytes = 0; i > 0; i -= bytes)
 		{
 			bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
+			if(bytes < 0)
+			{
+				perror("read");
+				return -1;
+			}
+			
 			if(write(file, buffer, bytes) < 0)
 			{
 				perror("write");
@@ -53,13 +68,15 @@ int main (int argc, char * argv[])
 			}
 
 			SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
-
-			i -= bytes;
 		}
 
 		close(file);
 
-		read(client, sha256_client, SHA256_DIGEST_LENGTH);
+		if(read(client, sha256_client, SHA256_DIGEST_LENGTH) < 0)
+		{
+			perror("read");
+			return -1;
+		}
 
 		SHA256_Final(sha256, &sha_ctx);
 
