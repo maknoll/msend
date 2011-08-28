@@ -17,7 +17,7 @@ int getFileSize(char *filename)
 	return fileinfo.st_size;
 }
 
-int main (int argc, char * argv[]) 
+int main (int argc, char *argv[]) 
 {
 	char *ip = argv[1];
 	int port = atoi(argv[2]);
@@ -39,15 +39,26 @@ int main (int argc, char * argv[])
 		return -1;
 	}
 	
-	socket_write(socket, &header, sizeof(struct mheader));
+	if(socket_write(socket, &header, sizeof(struct mheader)) < 0)
+	{
+		perror("socket_write");
+		return -1;
+	}
 	
 	int i, bytes;
-	for (i = header.length, bytes = 0; i > 0;)
+	for (i = header.length, bytes = 0; i > 0; i -= bytes)
 	{
 		bytes = read(file, buffer, BUFFERSIZE);
-		socket_write(socket, buffer, bytes);
-		
-		i -= bytes;
+		if(bytes < 0)
+		{
+			perror("read");
+			return -1;
+		}
+
+		if(socket_write(socket, buffer, bytes) < 0)
+		{
+			perror("socket_write");
+		}
 	}
 
 	close(file);
