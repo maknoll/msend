@@ -8,8 +8,8 @@ Receive a file with `mreceive port`
 
 Send a file with `msend ip port file`
 	
-Depencies
----------
+Dependencies
+------------
 Uses [liboveit][]
 
 [liboveit]:https://github.com/apfohl/liboveit
