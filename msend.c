@@ -3,6 +3,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 #include <string.h>
 #include <openssl/sha.h>
 
@@ -20,13 +23,14 @@ long getFileSize(char *filename)
 
 int main (int argc, char *argv[]) 
 {
-	char *ip = argv[1];
-	int port = atoi(argv[2]);
+	char *addr = argv[1];
+	char *port = argv[2];
 	char *filename = argv[3];
 	char buffer[BUFFERSIZE];
 	struct mheader header;
 	SHA256_CTX sha_ctx;
 	unsigned char sha256[SHA256_DIGEST_LENGTH];
+	struct addrinfo hints, *info;
 
 	// initialize array with zeros
 	memset(&header.filename, 0, 128);
@@ -34,7 +38,20 @@ int main (int argc, char *argv[])
 	strcpy(header.filename, filename);
 	header.length = getFileSize(filename);
 
-	int socket = socket_create_connect(ip, port);
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_socktype = SOCK_STREAM;
+
+	int error = getaddrinfo(addr, port, &hints, &info);
+	if (error) {
+		errx(1, "%s", gai_strerror(error));
+	}
+
+	int sock = socket(info->ai_family, info->ai_socktype, 0);
+
+	connect(sock, (struct sockaddr*)info->ai_addr, info->ai_addrlen);
+	
+	freeaddrinfo(info);
+
 	int file = open(filename, O_RDONLY);
 	if(file < 0)
 	{
@@ -42,7 +59,7 @@ int main (int argc, char *argv[])
 		return -1;
 	}
 	
-	if(socket_write(socket, &header, sizeof(struct mheader)) < 0)
+	if(write(sock, &header, sizeof(struct mheader)) < 0)
 	{
 		perror("socket_write");
 		return -1;
@@ -61,7 +78,7 @@ int main (int argc, char *argv[])
 			return -1;
 		}
 
-		if(socket_write(socket, buffer, bytes) < 0)
+		if(write(sock, buffer, bytes) < 0)
 		{
 			perror("socket_write");
 		}
@@ -72,13 +89,13 @@ int main (int argc, char *argv[])
 	close(file);
 
 	SHA256_Final(sha256, &sha_ctx);
-	if(socket_write(socket, sha256, SHA256_DIGEST_LENGTH) < 0)
+	if(write(sock, sha256, SHA256_DIGEST_LENGTH) < 0)
 	{
 		perror("socket_write");
 		return -1;
 	}
 
-	socket_close(socket);
+	close(sock);
 
 	return 0;
 }
