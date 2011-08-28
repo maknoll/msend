@@ -23,7 +23,7 @@ int main (int argc, char * argv[])
 	int clientPort;
 	int client = socket_accept(socket, clientIp, &clientPort);
 
-	recv(client, &header, sizeof(struct mheader), 0);
+	read(client, &header, sizeof(struct mheader));
 
 	printf("%s %i \n", header.filename, header.length);
 
@@ -39,7 +39,7 @@ int main (int argc, char * argv[])
 	while(i > 0)
 	{
 		//r = socket_read(client, buffer, BUFFERSIZE, -1);
-		r = recv(client, buffer, BUFFERSIZE, 0);
+		r = read(client, buffer, BUFFERSIZE);
 		printf("%i \n", r);
 		if(write(file, buffer, r) < 0)
 		{
