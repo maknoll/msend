@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <openssl/sha.h>
 
 #include "msend.h"
 
@@ -24,6 +25,8 @@ int main (int argc, char * argv[])
 	char *filename = argv[3];
 	char buffer[BUFFERSIZE];
 	struct mheader header;
+	SHA256_CTX sha_ctx;
+	unsigned char sha256[SHA256_DIGEST_LENGTH];
 
 	// initialize array with zeros
 	memset(&header.filename, 0, 128);
@@ -41,16 +44,24 @@ int main (int argc, char * argv[])
 	
 	socket_write(socket, &header, sizeof(struct mheader));
 	
+	SHA256_Init(&sha_ctx);
+
 	int i, bytes;
 	for (i = header.length, bytes = 0; i > 0;)
 	{
 		bytes = read(file, buffer, BUFFERSIZE);
 		socket_write(socket, buffer, bytes);
 		
+		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
+
 		i -= bytes;
 	}
 
 	close(file);
+
+	SHA256_Final(sha256, &sha_ctx);
+	socket_write(socket, sha256, SHA256_DIGEST_LENGTH);
+
 	socket_close(socket);
 
 	return 0;
