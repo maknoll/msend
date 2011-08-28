@@ -10,7 +10,7 @@
 
 #include "mreceive.h"
 
-#define BUFFERSIZE 1024
+#define BUFFERSIZE 1452
 
 int main (int argc, char * argv[]) 
 {

@@ -7,7 +7,7 @@
 
 #include "msend.h"
 
-#define BUFFERSIZE 1024
+#define BUFFERSIZE 1452
 
 int getFileSize(char *filename)
 {
