@@ -54,34 +54,29 @@ int main (int argc, char * argv[])
 		int i, bytes;
 		for(i = header.length, bytes = 0; i > 0; i -= bytes)
 		{
-<<<<<<< HEAD
-			bytes = read(client, buffer, BUFFERSIZE);
+			bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
 			if(bytes < 0)
 			{
 				perror("read");
 				return -1;
 			}
-
-=======
-			bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
->>>>>>> 35e9a611a8384bf54a3bf25530b084d573b8ad72
+			
 			if(write(file, buffer, bytes) < 0)
 			{
 				perror("write");
 				return -1;
 			}
-<<<<<<< HEAD
-=======
 
 			SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
-
-			i -= bytes;
->>>>>>> 35e9a611a8384bf54a3bf25530b084d573b8ad72
 		}
 
 		close(file);
 
-		read(client, sha256_client, SHA256_DIGEST_LENGTH);
+		if(read(client, sha256_client, SHA256_DIGEST_LENGTH) < 0)
+		{
+			perror("read");
+			return -1;
+		}
 
 		SHA256_Final(sha256, &sha_ctx);
 

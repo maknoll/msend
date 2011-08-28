@@ -54,7 +54,6 @@ int main (int argc, char *argv[])
 	for (i = header.length, bytes = 0; i > 0; i -= bytes)
 	{
 		bytes = read(file, buffer, BUFFERSIZE);
-<<<<<<< HEAD
 		if(bytes < 0)
 		{
 			perror("read");
@@ -65,19 +64,18 @@ int main (int argc, char *argv[])
 		{
 			perror("socket_write");
 		}
-=======
-		socket_write(socket, buffer, bytes);
 		
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
-
-		i -= bytes;
->>>>>>> 35e9a611a8384bf54a3bf25530b084d573b8ad72
 	}
 
 	close(file);
 
 	SHA256_Final(sha256, &sha_ctx);
-	socket_write(socket, sha256, SHA256_DIGEST_LENGTH);
+	if(socket_write(socket, sha256, SHA256_DIGEST_LENGTH) < 0)
+	{
+		perror("socket_write");
+		return -1;
+	}
 
 	socket_close(socket);
 
