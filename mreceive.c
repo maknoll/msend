@@ -66,10 +66,11 @@ int main (int argc, char * argv[])
 		socket_close(client);
 
 		printf("%s received (%i bytes) ", header.filename, header.length);
-		if (strcmp(sha256, sha256_client) == 0)
+		if (memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH) == 0)
 			printf("SHA256 matches\n");
 		else
 			printf("SHA256 differs\n");
+
 	}
 
 	socket_close(socket);
