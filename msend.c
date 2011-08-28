@@ -23,7 +23,6 @@ int main (int argc, char * argv[])
 	int port = atoi(argv[2]);
 	char *filename = argv[3];
 	char buffer[BUFFERSIZE];
-	int bytes;
 	struct mheader header;
 
 	// initialize array with zeros
@@ -34,12 +33,21 @@ int main (int argc, char * argv[])
 
 	int socket = socket_create_connect(ip, port);
 	int file = open(filename, O_RDONLY);
+	if(file < 0)
+	{
+		perror("open");
+		return -1;
+	}
 	
 	socket_write(socket, &header, sizeof(struct mheader));
-		
-	while ((bytes = read(file, buffer, BUFFERSIZE)) > 0)
+	
+	int i, bytes;
+	for (i = header.length, bytes = 0; i > 0;)
 	{
+		bytes = read(file, buffer, BUFFERSIZE);
 		socket_write(socket, buffer, bytes);
+		
+		i -= bytes;
 	}
 
 	close(file);

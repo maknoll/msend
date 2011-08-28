@@ -15,7 +15,6 @@
 int main (int argc, char * argv[]) 
 {
 	char buffer[BUFFERSIZE];
-	int bytes;
 	int port = atoi(argv[1]);
 	struct mheader header;
 
@@ -37,17 +36,16 @@ int main (int argc, char * argv[])
 			return -1;
 		}
 
-		int r = 0;
-		int i = header.length;
-		while(i > 0)
+		int i, bytes;
+		for (i = header.length, bytes = 0; i > 0;)
 		{
-			r = read(client, buffer, BUFFERSIZE);
-			if(write(file, buffer, r) < 0)
+			bytes = read(client, buffer, BUFFERSIZE);
+			if(write(file, buffer, bytes) < 0)
 			{
 				perror("write");
 				return -1;
 			}
-			i -= r;
+			i -= bytes;
 		}
 
 		close(file);
