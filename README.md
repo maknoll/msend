@@ -5,10 +5,10 @@ Simple P2P file transfer program.
 Usage
 -----
 Receive file
-`mreceive` port
+`mreceive port`
 
 Send file
-`msend` ip port file
+`msend ip port file`
 	
 Depencies
 ---------
