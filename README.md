@@ -5,11 +5,13 @@ Simple P2P file transfer program.
 Usage
 -----
 Receive file
-	mreceive port
+`mreceive` port
 
 Send file
-	msend ip port file
+`msend` ip port file
 	
 Depencies
 ---------
-Uses [liboveit]:https://github.com/apfohl/liboveit
+Uses [liboveit][]
+
+[liboveit]:https://github.com/apfohl/liboveit
