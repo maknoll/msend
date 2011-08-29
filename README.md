@@ -10,6 +10,4 @@ Send a file with `msend ip port file`
 	
 Dependencies
 ------------
-Uses [liboveit][]
-
-[liboveit]:https://github.com/apfohl/liboveit
+Needs OpenSSL (libssl) for SHA256 calculation

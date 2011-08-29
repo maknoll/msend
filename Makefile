@@ -1,5 +1,5 @@
 CC      = gcc
-LDFLAGS = -loveit -lcrypto
+LDFLAGS = -lcrypto
 
 all: msend mreceive
 

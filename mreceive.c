@@ -7,29 +7,56 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
+#include <netdb.h>
+#include <string.h>
 #include <openssl/sha.h>
 
 #include "mreceive.h"
 
 #define BUFFERSIZE 1452
 
+int socket_bind_listen(char *port)
+{
+	struct addrinfo hints, *info;
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_family = AF_INET;
+
+	int error = getaddrinfo(NULL, port, &hints, &info);
+	if (error) {
+		errx(1, "%s", gai_strerror(error));
+	}
+
+	int sock = socket(info->ai_family, info->ai_socktype, 0);
+
+	if (bind(sock, info->ai_addr, info->ai_addrlen))
+	{
+		perror("bind");
+		return -1;
+	}
+
+	listen(sock, 4);
+
+	freeaddrinfo(info);
+
+	return sock;
+}
+
 int main (int argc, char * argv[]) 
 {
 	char buffer[BUFFERSIZE];
-	int port = atoi(argv[1]);
+	char *port = argv[1];
 	struct mheader header;
 	SHA256_CTX sha_ctx;
 	unsigned char sha256[SHA256_DIGEST_LENGTH];
 	unsigned char sha256_client[SHA256_DIGEST_LENGTH];
 
-	int socket = socket_create_listen("0.0.0.0", port, 4);
-	
-	struct sockaddr_in si;
-	socklen_t len = sizeof(si);
+	int sock = socket_bind_listen(port);
 
 	while (true)
 	{
-		int client = accept(socket, (void *)&si, &len);
+		int client = accept(sock, NULL, NULL);
 		if(client < 0)
 		{
 			perror("accept");
@@ -91,7 +118,7 @@ int main (int argc, char * argv[])
 
 	}
 
-	socket_close(socket);
+	socket_close(sock);
 	
 	return 0;
 }
