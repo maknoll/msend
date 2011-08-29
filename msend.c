@@ -25,21 +25,27 @@ long getFileSize(char *filename)
 
 int socket_connect(char *addr, char *port)
 {
-	struct addrinfo hints, *info;
+	int sock;
+	struct addrinfo hints, *res, *info;
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_family = AF_INET;
 
-	int error = getaddrinfo(addr, port, &hints, &info);
+	int error = getaddrinfo(addr, port, &hints, &res);
 	if (error) {
 		errx(1, "%s", gai_strerror(error));
 	}
-
-	int sock = socket(info->ai_family, info->ai_socktype, 0);
-
-	connect(sock, (struct sockaddr*)info->ai_addr, info->ai_addrlen);
 	
+	for(info = res; info != NULL; info = info->ai_next)
+	{
+		sock = socket(info->ai_family, info->ai_socktype, 0);
+		if(connect(sock, (struct sockaddr*)info->ai_addr, info->ai_addrlen) == 0)
+			break;
+		else
+			close(sock);
+	}
+
 	freeaddrinfo(info);
 
 	return sock;
@@ -71,7 +77,7 @@ int main (int argc, char *argv[])
 	
 	if(write(sock, &header, sizeof(struct mheader)) < 0)
 	{
-		perror("socket_write");
+		perror("write");
 		return -1;
 	}
 	
@@ -90,7 +96,7 @@ int main (int argc, char *argv[])
 
 		if(write(sock, buffer, bytes) < 0)
 		{
-			perror("socket_write");
+			perror("write");
 		}
 		
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
@@ -101,7 +107,7 @@ int main (int argc, char *argv[])
 	SHA256_Final(sha256, &sha_ctx);
 	if(write(sock, sha256, SHA256_DIGEST_LENGTH) < 0)
 	{
-		perror("socket_write");
+		perror("write");
 		return -1;
 	}
 

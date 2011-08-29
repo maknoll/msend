@@ -108,7 +108,7 @@ int main (int argc, char * argv[])
 
 		SHA256_Final(sha256, &sha_ctx);
 
-		socket_close(client);
+		close(client);
 
 		printf("%s received (%li bytes) ", header.filename, header.length);
 		if (!memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH))
@@ -118,7 +118,7 @@ int main (int argc, char * argv[])
 
 	}
 
-	socket_close(sock);
+	close(sock);
 	
 	return 0;
 }
