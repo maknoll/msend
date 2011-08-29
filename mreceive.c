@@ -21,7 +21,7 @@ int socket_bind_listen(char *port)
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_family = AF_INET;
+//	hints.ai_family = AF_INET;
 
 	int error = getaddrinfo(NULL, port, &hints, &info);
 	if (error) {
