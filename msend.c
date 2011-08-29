@@ -87,6 +87,9 @@ int main (int argc, char *argv[])
 	int bytes;
 	for (i = header.length, bytes = 0; i > 0; i -= bytes)
 	{
+		fflush(stdout);
+		printf("\r%s %li/%li bytes ", header.filename, header.length - i, header.length);
+
 		bytes = read(file, buffer, BUFFERSIZE);
 		if(bytes < 0)
 		{
@@ -101,6 +104,8 @@ int main (int argc, char *argv[])
 		
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
 	}
+
+	printf("done  \n");
 
 	close(file);
 

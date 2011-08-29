@@ -83,6 +83,9 @@ int main (int argc, char * argv[])
 		int bytes;
 		for(i = header.length, bytes = 0; i > 0; i -= bytes)
 		{
+			fflush(stdout);
+			printf("\r%s %li/%li bytes ", header.filename, header.length - i, header.length);
+
 			bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
 			if(bytes < 0)
 			{
@@ -111,7 +114,7 @@ int main (int argc, char * argv[])
 
 		close(client);
 
-		printf("%s received (%li bytes) ", header.filename, header.length);
+		printf("received ");
 		if (!memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH))
 			printf("SHA256 matches\n");
 		else
