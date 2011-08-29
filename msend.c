@@ -27,6 +27,7 @@ int socket_connect(char *addr, char *port)
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_family = AF_INET;
 
 	int error = getaddrinfo(addr, port, &hints, &info);
 	if (error) {
