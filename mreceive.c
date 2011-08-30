@@ -44,7 +44,7 @@ int socket_bind_listen(char *port)
 	return sock;
 }
 
-int receive_file(int sock)
+int receive_file(int client)
 {
 	struct mheader header;
 	char buffer[BUFFERSIZE];
@@ -52,8 +52,6 @@ int receive_file(int sock)
 	unsigned char sha256[SHA256_DIGEST_LENGTH];
 	unsigned char sha256_client[SHA256_DIGEST_LENGTH];
 
-
-	int client = accept(sock, NULL, NULL);
 	if(client < 0)
 	{
 		perror("accept");
@@ -122,12 +120,14 @@ int receive_file(int sock)
 int main (int argc, char * argv[]) 
 {
 	char *port = argv[1];
+	int client;
 
 	int sock = socket_bind_listen(port);
 
 	while (true)
 	{
-		receive_file(sock);
+		client = accept(sock, NULL, NULL);
+		receive_file(client);
 	}
 
 	close(sock);
