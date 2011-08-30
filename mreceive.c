@@ -44,82 +44,90 @@ int socket_bind_listen(char *port)
 	return sock;
 }
 
-int main (int argc, char * argv[]) 
+int receive_file(int sock)
 {
-	char buffer[BUFFERSIZE];
-	char *port = argv[1];
 	struct mheader header;
+	char buffer[BUFFERSIZE];
 	SHA256_CTX sha_ctx;
 	unsigned char sha256[SHA256_DIGEST_LENGTH];
 	unsigned char sha256_client[SHA256_DIGEST_LENGTH];
+
+
+	int client = accept(sock, NULL, NULL);
+	if(client < 0)
+	{
+		perror("accept");
+		return -1;
+	}
+
+	if(read(client, &header, sizeof(struct mheader)) < 0)
+	{
+		perror("read");
+		return -1;
+	}
+
+	int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
+	if(file < 0)
+	{
+		perror("open");
+		return -1;
+	}
+
+	SHA256_Init(&sha_ctx);
+
+	long i;
+	int bytes;
+	for(i = header.length, bytes = 0; i > 0; i -= bytes)
+	{
+		fflush(stdout);
+		printf("\r%s %li/%li bytes ", header.filename, header.length - i, header.length);
+
+		bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
+		if(bytes < 0)
+		{
+			perror("read");
+			return -1;
+		}
+		
+		if(write(file, buffer, bytes) < 0)
+		{
+			perror("write");
+			return -1;
+		}
+
+		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
+	}
+
+	close(file);
+
+	if(read(client, sha256_client, SHA256_DIGEST_LENGTH) < 0)
+	{
+		perror("read");
+		return -1;
+	}
+
+	SHA256_Final(sha256, &sha_ctx);
+
+	close(client);
+
+	printf("\r%s %li bytes received ", header.filename, header.length);
+	if (!memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH))
+		printf("SHA256 matches\n");
+	else
+		printf("SHA256 differs\n");
+
+	return 0;
+}
+
+int main (int argc, char * argv[]) 
+{
+	char *port = argv[1];
 
 	int sock = socket_bind_listen(port);
 
 	while (true)
 	{
-		int client = accept(sock, NULL, NULL);
-		if(client < 0)
-		{
-			perror("accept");
-			return -1;
-		}
-
-		if(read(client, &header, sizeof(struct mheader)) < 0)
-		{
-			perror("read");
-			return -1;
-		}
-
-		int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
-		if(file < 0)
-		{
-			perror("open");
-			return -1;
-		}
-
-		SHA256_Init(&sha_ctx);
-
-		long i;
-		int bytes;
-		for(i = header.length, bytes = 0; i > 0; i -= bytes)
-		{
-			fflush(stdout);
-			printf("\r%s %li/%li bytes ", header.filename, header.length - i, header.length);
-
-			bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
-			if(bytes < 0)
-			{
-				perror("read");
-				return -1;
-			}
-			
-			if(write(file, buffer, bytes) < 0)
-			{
-				perror("write");
-				return -1;
-			}
-
-			SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
-		}
-
-		close(file);
-
-		if(read(client, sha256_client, SHA256_DIGEST_LENGTH) < 0)
-		{
-			perror("read");
-			return -1;
-		}
-
-		SHA256_Final(sha256, &sha_ctx);
-
-		close(client);
-
-		printf("received ");
-		if (!memcmp(sha256, sha256_client, SHA256_DIGEST_LENGTH))
-			printf("SHA256 matches\n");
-		else
-			printf("SHA256 differs\n");
-
+		receive_file(sock);
 	}
 
 	close(sock);

@@ -51,22 +51,17 @@ int socket_connect(char *addr, char *port)
 	return sock;
 }
 
-int main (int argc, char *argv[]) 
+int send_file(int sock, char *filename)
 {
-	char *addr = argv[1];
-	char *port = argv[2];
-	char *filename = argv[3];
-	char buffer[BUFFERSIZE];
 	struct mheader header;
+	char buffer[BUFFERSIZE];
 	SHA256_CTX sha_ctx;
 	unsigned char sha256[SHA256_DIGEST_LENGTH];
-
+	
 	memset(&header.filename, 0, 128);
 
 	strcpy(header.filename, filename);
 	header.length = getFileSize(filename);
-
-	int sock = socket_connect(addr, port);
 
 	int file = open(filename, O_RDONLY);
 	if(file < 0)
@@ -105,8 +100,7 @@ int main (int argc, char *argv[])
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
 	}
 
-	printf("done  \n");
-
+	printf("\r%s %li bytes send       \n", header.filename, header.length);
 	close(file);
 
 	SHA256_Final(sha256, &sha_ctx);
@@ -115,6 +109,19 @@ int main (int argc, char *argv[])
 		perror("write");
 		return -1;
 	}
+
+	return 0;
+}
+
+int main (int argc, char *argv[]) 
+{
+	char *addr = argv[1];
+	char *port = argv[2];
+	char *filename = argv[3];
+
+	int sock = socket_connect(addr, port);
+
+	send_file(sock, filename);
 
 	close(sock);
 
