@@ -65,16 +65,10 @@ int send_file(int sock, char *filename)
 
 	int file = open(filename, O_RDONLY);
 	if(file < 0)
-	{
-		perror("open");
 		return -1;
-	}
 	
 	if(write(sock, &header, sizeof(struct mheader)) < 0)
-	{
-		perror("write");
 		return -1;
-	}
 	
 	SHA256_Init(&sha_ctx);
 
@@ -87,15 +81,10 @@ int send_file(int sock, char *filename)
 
 		bytes = read(file, buffer, BUFFERSIZE);
 		if(bytes < 0)
-		{
-			perror("read");
 			return -1;
-		}
 
 		if(write(sock, buffer, bytes) < 0)
-		{
-			perror("write");
-		}
+			return -1;
 		
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
 	}
@@ -105,10 +94,7 @@ int send_file(int sock, char *filename)
 
 	SHA256_Final(sha256, &sha_ctx);
 	if(write(sock, sha256, SHA256_DIGEST_LENGTH) < 0)
-	{
-		perror("write");
 		return -1;
-	}
 
 	return 0;
 }
@@ -120,8 +106,17 @@ int main (int argc, char *argv[])
 	char *filename = argv[3];
 
 	int sock = socket_connect(addr, port);
+	if(sock < 0)
+	{
+		perror("socket_connect");
+		return -1;
+	}
 
-	send_file(sock, filename);
+	if(send_file(sock, filename) < 0)
+	{
+		perror("send_file");
+		return -1;
+	}
 
 	close(sock);
 
