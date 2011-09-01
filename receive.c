@@ -34,10 +34,7 @@ int socket_bind_listen(char *port)
 	int sock = socket(info->ai_family, info->ai_socktype, 0);
 
 	if (bind(sock, info->ai_addr, info->ai_addrlen))
-	{
-		perror("bind");
 		return -1;
-	}
 
 	listen(sock, 4);
 
@@ -55,23 +52,14 @@ int receive_file(int client)
 	unsigned char sha256_client[SHA256_DIGEST_LENGTH];
 
 	if(client < 0)
-	{
-		perror("accept");
 		return -1;
-	}
 
 	if(read(client, &header, sizeof(struct mheader)) < 0)
-	{
-		perror("read");
 		return -1;
-	}
 
 	int file = open(header.filename, O_WRONLY| O_TRUNC | O_CREAT, 0644);
 	if(file < 0)
-	{
-		perror("open");
 		return -1;
-	}
 
 	SHA256_Init(&sha_ctx);
 
@@ -84,16 +72,10 @@ int receive_file(int client)
 
 		bytes = read(client, buffer, i > BUFFERSIZE ? BUFFERSIZE : i);
 		if(bytes < 0)
-		{
-			perror("read");
 			return -1;
-		}
 		
 		if(write(file, buffer, bytes) < 0)
-		{
-			perror("write");
 			return -1;
-		}
 
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
 	}
@@ -101,10 +83,7 @@ int receive_file(int client)
 	close(file);
 
 	if(read(client, sha256_client, SHA256_DIGEST_LENGTH) < 0)
-	{
-		perror("read");
 		return -1;
-	}
 
 	SHA256_Final(sha256, &sha_ctx);
 
@@ -124,11 +103,26 @@ int receive_from (char *port)
 	int client;
 
 	int sock = socket_bind_listen(port);
+	if(sock < 0)
+	{
+		perror("socket_bind_listen");
+		return -1;
+	}
 
 	while (true)
 	{
 		client = accept(sock, NULL, NULL);
-		receive_file(client);
+		if(client < 0)
+		{
+			perror("accept");
+			return -1;
+		}
+		
+		if(receive_file(client) < 0)
+		{
+			perror("receive_file");
+			return -1;
+		}
 	}
 
 	close(sock);
