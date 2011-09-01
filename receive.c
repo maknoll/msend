@@ -11,7 +11,9 @@
 #include <string.h>
 #include <openssl/sha.h>
 
-#include "mreceive.h"
+#include "receive.h"
+#include "protocol.h"
+
 
 #define BUFFERSIZE 1452
 
@@ -117,9 +119,8 @@ int receive_file(int client)
 	return 0;
 }
 
-int main (int argc, char * argv[]) 
+int receive_from (char *port) 
 {
-	char *port = argv[1];
 	int client;
 
 	int sock = socket_bind_listen(port);

@@ -1,5 +1,4 @@
 *.swp
 .DS_Store
-test
-msend
-mreceive
+*.o
+mm

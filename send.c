@@ -11,11 +11,12 @@
 #include <string.h>
 #include <openssl/sha.h>
 
-#include "msend.h"
+#include "send.h"
+#include "protocol.h"
 
 #define BUFFERSIZE 1452
 
-long getFileSize(char *filename)
+long get_filesize(char *filename)
 {
 	struct stat fileinfo;
 	stat(filename, &fileinfo);
@@ -61,7 +62,7 @@ int send_file(int sock, char *filename)
 	memset(&header.filename, 0, 128);
 
 	strcpy(header.filename, filename);
-	header.length = getFileSize(filename);
+	header.length = get_filesize(filename);
 
 	int file = open(filename, O_RDONLY);
 	if(file < 0)
@@ -113,12 +114,8 @@ int send_file(int sock, char *filename)
 	return 0;
 }
 
-int main (int argc, char *argv[]) 
+int send_to (char *addr, char *port, char *filename) 
 {
-	char *addr = argv[1];
-	char *port = argv[2];
-	char *filename = argv[3];
-
 	int sock = socket_connect(addr, port);
 
 	send_file(sock, filename);

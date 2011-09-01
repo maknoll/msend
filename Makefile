@@ -1,10 +1,16 @@
 CC      = gcc
 LDFLAGS = -lcrypto
+CFLAGS  = -arch x86_64
+OBJ     = main.o send.o receive.o
 
-all: msend mreceive
+all: $(OBJ)
+	$(CC) $(LDFLAGS) -o mm $(OBJ)
 
-msend: msend.c msend.h
-	$(CC) $(LDFLAGS) -o msend msend.c
+main: main.c
+	$(CC) $(CFLAGS) -c main.c
 
-mreceive: mreceive.c mreceive.h
-	$(CC) $(LDFLAGS) -o mreceive mreceive.c
+send: send.c send.h protocol.h
+	$(CC) $(CFLAGS) -c send.c
+
+receive: receive.c receive.h protocol.h
+	$(CC) $(CFLAGS) -c receive.c
