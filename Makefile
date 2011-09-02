@@ -14,3 +14,6 @@ send: send.c send.h protocol.h
 
 receive: receive.c receive.h protocol.h
 	$(CC) $(CFLAGS) -c receive.c
+
+clean:
+	rm -f $(OBJ) mm
