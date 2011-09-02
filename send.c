@@ -10,16 +10,17 @@
 #include <netdb.h>
 #include <string.h>
 #include <openssl/sha.h>
+#include <libgen.h>
 
 #include "send.h"
 #include "protocol.h"
 
 #define BUFFERSIZE 1452
 
-long get_filesize(char *filename)
+long get_filesize(char *filepath)
 {
 	struct stat fileinfo;
-	stat(filename, &fileinfo);
+	stat(filepath, &fileinfo);
 	
 	return fileinfo.st_size;
 }
@@ -41,7 +42,7 @@ int socket_connect(char *addr, char *port)
 	for(info = res; info != NULL; info = info->ai_next)
 	{
 		sock = socket(info->ai_family, info->ai_socktype, 0);
-		if(connect(sock, (struct sockaddr*)info->ai_addr, info->ai_addrlen) == 0)
+		if (connect(sock, (struct sockaddr*)info->ai_addr, info->ai_addrlen) == 0)
 			break;
 		else
 			close(sock);
@@ -52,7 +53,7 @@ int socket_connect(char *addr, char *port)
 	return sock;
 }
 
-int send_file(int sock, char *filename)
+int send_file(int sock, char *filepath)
 {
 	struct mheader header;
 	char buffer[BUFFERSIZE];
@@ -61,14 +62,14 @@ int send_file(int sock, char *filename)
 	
 	memset(&header.filename, 0, 128);
 
-	strcpy(header.filename, filename);
-	header.length = get_filesize(filename);
+	strcpy(header.filename, basename(filepath));
+	header.length = get_filesize(filepath);
 
-	int file = open(filename, O_RDONLY);
-	if(file < 0)
+	int file = open(filepath, O_RDONLY);
+	if (file < 0)
 		return -1;
 	
-	if(write(sock, &header, sizeof(struct mheader)) < 0)
+	if (write(sock, &header, sizeof(struct mheader)) < 0)
 		return -1;
 	
 	SHA256_Init(&sha_ctx);
@@ -81,10 +82,10 @@ int send_file(int sock, char *filename)
 		printf("\r%s %li/%li bytes ", header.filename, header.length - i, header.length);
 
 		bytes = read(file, buffer, BUFFERSIZE);
-		if(bytes < 0)
+		if (bytes < 0)
 			return -1;
 
-		if(write(sock, buffer, bytes) < 0)
+		if (write(sock, buffer, bytes) < 0)
 			return -1;
 		
 		SHA256_Update(&sha_ctx, (unsigned char*)buffer, bytes);
@@ -94,22 +95,22 @@ int send_file(int sock, char *filename)
 	close(file);
 
 	SHA256_Final(sha256, &sha_ctx);
-	if(write(sock, sha256, SHA256_DIGEST_LENGTH) < 0)
+	if (write(sock, sha256, SHA256_DIGEST_LENGTH) < 0)
 		return -1;
 
 	return 0;
 }
 
-int send_to (char *addr, char *port, char *filename) 
+int send_to (char *addr, char *port, char *filepath) 
 {
 	int sock = socket_connect(addr, port);
-	if(sock < 0)
+	if (sock < 0)
 	{
 		perror("socket_connect");
 		return -1;
 	}
 
-	if(send_file(sock, filename) < 0)
+	if (send_file(sock, filepath) < 0)
 	{
 		perror("send_file");
 		return -1;

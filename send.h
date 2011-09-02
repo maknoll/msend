@@ -1,2 +1,2 @@
 
-int send_to (char *addr, char *port, char *filename);
+int send_to (char *addr, char *port, char *filepath);
