@@ -14,6 +14,19 @@ void print_usage(void)
 int main (int argc, char *argv[]) 
 {
 	char default_port[] = "8080";
+	char opt;
+
+	while ((opt = getopt(argc, argv, "r")) != -1)
+	{
+		switch (opt)
+		{
+			case 'r':
+				printf("recursive\n");
+				break;
+		}
+	}
+	argc -= optind - 1;
+	argv += optind - 1;
 
 	if (argc < 2)
 	{
