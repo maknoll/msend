@@ -1,0 +1,310 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B02EF771412A124004C3C69 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B02EF761412A124004C3C69 /* Cocoa.framework */; };
+		5B02EF811412A124004C3C69 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B02EF7F1412A124004C3C69 /* InfoPlist.strings */; };
+		5B02EF831412A124004C3C69 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B02EF821412A124004C3C69 /* main.m */; };
+		5B02EF871412A124004C3C69 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5B02EF851412A124004C3C69 /* Credits.rtf */; };
+		5B02EF8A1412A124004C3C69 /* msend_guiAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B02EF891412A124004C3C69 /* msend_guiAppDelegate.m */; };
+		5B02EF8D1412A124004C3C69 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B02EF8B1412A124004C3C69 /* MainMenu.xib */; };
+		5B02EF9F1412A1D6004C3C69 /* receive.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B02EF9B1412A1D6004C3C69 /* receive.c */; };
+		5B02EFA01412A1D6004C3C69 /* send.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B02EF9D1412A1D6004C3C69 /* send.c */; };
+		5B02EFA31412A30A004C3C69 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B02EFA21412A30A004C3C69 /* libcrypto.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5B02EF721412A124004C3C69 /* msend-gui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "msend-gui.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B02EF761412A124004C3C69 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		5B02EF791412A124004C3C69 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		5B02EF7A1412A124004C3C69 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		5B02EF7B1412A124004C3C69 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5B02EF7E1412A124004C3C69 /* msend-gui-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "msend-gui-Info.plist"; sourceTree = "<group>"; };
+		5B02EF801412A124004C3C69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5B02EF821412A124004C3C69 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5B02EF841412A124004C3C69 /* msend-gui-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "msend-gui-Prefix.pch"; sourceTree = "<group>"; };
+		5B02EF861412A124004C3C69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		5B02EF881412A124004C3C69 /* msend_guiAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msend_guiAppDelegate.h; sourceTree = "<group>"; };
+		5B02EF891412A124004C3C69 /* msend_guiAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = msend_guiAppDelegate.m; sourceTree = "<group>"; };
+		5B02EF8C1412A124004C3C69 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		5B02EF9B1412A1D6004C3C69 /* receive.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = receive.c; sourceTree = SOURCE_ROOT; };
+		5B02EF9C1412A1D6004C3C69 /* receive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = receive.h; sourceTree = SOURCE_ROOT; };
+		5B02EF9D1412A1D6004C3C69 /* send.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = send.c; sourceTree = SOURCE_ROOT; };
+		5B02EF9E1412A1D6004C3C69 /* send.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = send.h; sourceTree = SOURCE_ROOT; };
+		5B02EFA21412A30A004C3C69 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5B02EF6F1412A124004C3C69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B02EFA31412A30A004C3C69 /* libcrypto.dylib in Frameworks */,
+				5B02EF771412A124004C3C69 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5B02EF671412A124004C3C69 = {
+			isa = PBXGroup;
+			children = (
+				5B02EFA21412A30A004C3C69 /* libcrypto.dylib */,
+				5B02EF7C1412A124004C3C69 /* msend-gui */,
+				5B02EF751412A124004C3C69 /* Frameworks */,
+				5B02EF731412A124004C3C69 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5B02EF731412A124004C3C69 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B02EF721412A124004C3C69 /* msend-gui.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5B02EF751412A124004C3C69 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B02EF761412A124004C3C69 /* Cocoa.framework */,
+				5B02EF781412A124004C3C69 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5B02EF781412A124004C3C69 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B02EF791412A124004C3C69 /* AppKit.framework */,
+				5B02EF7A1412A124004C3C69 /* CoreData.framework */,
+				5B02EF7B1412A124004C3C69 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		5B02EF7C1412A124004C3C69 /* msend-gui */ = {
+			isa = PBXGroup;
+			children = (
+				5B02EF9B1412A1D6004C3C69 /* receive.c */,
+				5B02EF9C1412A1D6004C3C69 /* receive.h */,
+				5B02EF9D1412A1D6004C3C69 /* send.c */,
+				5B02EF9E1412A1D6004C3C69 /* send.h */,
+				5B02EF881412A124004C3C69 /* msend_guiAppDelegate.h */,
+				5B02EF891412A124004C3C69 /* msend_guiAppDelegate.m */,
+				5B02EF8B1412A124004C3C69 /* MainMenu.xib */,
+				5B02EF7D1412A124004C3C69 /* Supporting Files */,
+			);
+			path = "msend-gui";
+			sourceTree = "<group>";
+		};
+		5B02EF7D1412A124004C3C69 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5B02EF7E1412A124004C3C69 /* msend-gui-Info.plist */,
+				5B02EF7F1412A124004C3C69 /* InfoPlist.strings */,
+				5B02EF821412A124004C3C69 /* main.m */,
+				5B02EF841412A124004C3C69 /* msend-gui-Prefix.pch */,
+				5B02EF851412A124004C3C69 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5B02EF711412A124004C3C69 /* msend-gui */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B02EF901412A124004C3C69 /* Build configuration list for PBXNativeTarget "msend-gui" */;
+			buildPhases = (
+				5B02EF6E1412A124004C3C69 /* Sources */,
+				5B02EF6F1412A124004C3C69 /* Frameworks */,
+				5B02EF701412A124004C3C69 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "msend-gui";
+			productName = "msend-gui";
+			productReference = 5B02EF721412A124004C3C69 /* msend-gui.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5B02EF691412A124004C3C69 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Otto-von-Guericke-Universität Magdeburg";
+			};
+			buildConfigurationList = 5B02EF6C1412A124004C3C69 /* Build configuration list for PBXProject "msend-gui" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5B02EF671412A124004C3C69;
+			productRefGroup = 5B02EF731412A124004C3C69 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5B02EF711412A124004C3C69 /* msend-gui */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5B02EF701412A124004C3C69 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B02EF811412A124004C3C69 /* InfoPlist.strings in Resources */,
+				5B02EF871412A124004C3C69 /* Credits.rtf in Resources */,
+				5B02EF8D1412A124004C3C69 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5B02EF6E1412A124004C3C69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B02EF831412A124004C3C69 /* main.m in Sources */,
+				5B02EF8A1412A124004C3C69 /* msend_guiAppDelegate.m in Sources */,
+				5B02EF9F1412A1D6004C3C69 /* receive.c in Sources */,
+				5B02EFA01412A1D6004C3C69 /* send.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5B02EF7F1412A124004C3C69 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5B02EF801412A124004C3C69 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5B02EF851412A124004C3C69 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5B02EF861412A124004C3C69 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		5B02EF8B1412A124004C3C69 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5B02EF8C1412A124004C3C69 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5B02EF8E1412A124004C3C69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5B02EF8F1412A124004C3C69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5B02EF911412A124004C3C69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "msend-gui/msend-gui-Prefix.pch";
+				INFOPLIST_FILE = "msend-gui/msend-gui-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		5B02EF921412A124004C3C69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "msend-gui/msend-gui-Prefix.pch";
+				INFOPLIST_FILE = "msend-gui/msend-gui-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5B02EF6C1412A124004C3C69 /* Build configuration list for PBXProject "msend-gui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B02EF8E1412A124004C3C69 /* Debug */,
+				5B02EF8F1412A124004C3C69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B02EF901412A124004C3C69 /* Build configuration list for PBXNativeTarget "msend-gui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B02EF911412A124004C3C69 /* Debug */,
+				5B02EF921412A124004C3C69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5B02EF691412A124004C3C69 /* Project object */;
+}

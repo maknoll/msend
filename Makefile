@@ -17,3 +17,9 @@ receive: receive.c receive.h protocol.h
 
 clean:
 	rm -f $(OBJ) mm
+
+gui:
+	xcodebuild -project msend-gui.xcodeproj $(XCODEFLAGS)
+
+guiclean:
+	xcodebuild -project msend-gui.xcodeproj clean;
