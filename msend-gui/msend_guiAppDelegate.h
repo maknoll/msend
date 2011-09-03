@@ -10,10 +10,25 @@
 
 @interface msend_guiAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow *window;
+    NSTextField *receiver_textfield;
+    NSTextField *port_textfield;
+    NSPathControl *path_pathcontrol;
+    NSTextField *log_textfield;
+    NSButton *receive_button;
 }
 
-- (IBAction)click_test:(id)sender;
-
 @property (assign) IBOutlet NSWindow *window;
+
+@property (assign) IBOutlet NSTextField *receiver_textfield;
+
+@property (assign) IBOutlet NSTextField *port_textfield;
+
+@property (assign) IBOutlet NSPathControl *path_pathcontrol;
+
+@property (assign) IBOutlet NSTextField *log_textfield;
+
+@property (assign) IBOutlet NSButton *receive_button;
+
+- (IBAction)click_receive:(id)sender;
 
 @end

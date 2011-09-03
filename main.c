@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
 		else
 			port = default_port;
 
-		receive_from (port);
+		receive_from (port, NULL);
 	}
 
 	return 1;
