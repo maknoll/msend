@@ -10,7 +10,6 @@
 #import "send.h"
 #import "receive.h"
 #import <sys/socket.h>
-#import <pthread.h>
 
 @implementation msend_guiAppDelegate
 
@@ -21,7 +20,35 @@
 @synthesize receive_button;
 @synthesize window;
 
-pthread_t th;
+- (void)start_receiving
+{
+    int sock = socket_bind_listen("8080");
+    
+    listening_handle = [[NSFileHandle alloc]
+                       initWithFileDescriptor:sock
+                       closeOnDealloc:YES];
+    
+    [[NSNotificationCenter defaultCenter] 
+     addObserver:self
+        selector:@selector(accept_client:)
+            name:NSFileHandleConnectionAcceptedNotification
+          object:nil];
+    [listening_handle acceptConnectionInBackgroundAndNotify];
+}
+
+- (void)stop_receiving
+{
+    [listening_handle dealloc];
+}
+
+- (void)accept_client:(NSNotification *)notfication
+{
+    NSFileHandle *client = [[notfication userInfo] objectForKey:NSFileHandleNotificationFileHandleItem];
+    receive_file([client fileDescriptor]);
+    close([client fileDescriptor]);
+    
+    [listening_handle acceptConnectionInBackgroundAndNotify];
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -33,11 +60,11 @@ pthread_t th;
 {
     if ([receive_button state] == NSOnState) {
         [log_textfield setStringValue:@"An"];
-        pthread_create(&th, NULL, (void *)receive_from, "8080");
+        [self start_receiving];
     }
     else {
         [log_textfield setStringValue:@"Aus"];
-        pthread_exit(th); //doesnt work
+        [self stop_receiving];
     }
 }
 @end

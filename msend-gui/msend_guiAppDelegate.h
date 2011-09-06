@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 @interface msend_guiAppDelegate : NSObject <NSApplicationDelegate> {
+    NSFileHandle *listening_handle;
+    
     NSWindow *window;
     NSTextField *receiver_textfield;
     NSTextField *port_textfield;

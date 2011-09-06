@@ -65,7 +65,7 @@ int receive_file(int client)
 	SHA256_Init(&sha_ctx);
 
 	long i;
-	int bytes;
+	ssize_t bytes;
 	for(i = header.length, bytes = 0; i > 0; i -= bytes)
 	{
 		fflush(stdout);
